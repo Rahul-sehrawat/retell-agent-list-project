@@ -7,16 +7,87 @@ import { RiVoiceprintLine } from "react-icons/ri";
 import { IoMdSettings } from "react-icons/io";
 import { SlCalender } from "react-icons/sl";
 import { FaHashtag } from "react-icons/fa6";
+import { FaRegEdit } from "react-icons/fa";
+import { PiHashStraightFill } from "react-icons/pi";
 
-export default function Custombox({ agent_name }) {
+
+export default function Custombox({agent_id, agent_name }) {
   const [activeSection, setActiveSection] = useState('voice'); // this is for left sidebar
   const [activeToggle, setActiveToggle] = useState('call');  // this is for right sidebar
+  const [newAgentName, setNewAgentName] = useState(agent_name);
+  const [isEditing, setIsEditing] = useState(false); 
+  const [loading, setLoading] = useState(false); // loading state for the patch request
+
+   // Function to handle agent name update
+   const handleUpdateName = async () => {
+    if (!newAgentName || newAgentName === agent_name) {
+      alert('Please enter a new name.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/agents/${agent_id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          agentId: agent_id,
+          agentName: newAgentName,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Agent name not updated');
+      }
+
+      const updatedAgent = await response.json();
+      setIsEditing(false); 
+    } catch (error) {
+      console.error('Error updating agent name:', error);
+      alert('Failed to update agent name.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex h-[90%] w-[70%] bg-gray-100">
       <div className="flex-1 flex flex-col">
-        <header className="bg-purple-600 text-white text-center py-4 font-bold">
-          {agent_name}
+      <header className="bg-purple-600 text-white text-center py-4 font-bold">
+          {isEditing ? (
+            <div className="flex justify-center items-center space-x-2">
+              <Input
+                value={newAgentName}
+                onChange={(e) => setNewAgentName(e.target.value)}
+                className="bg-white w-52 text-black rounded-xl"
+              />
+              <Button
+                onClick={handleUpdateName}
+                disabled={loading}
+                className="bg-green-500 rounded-xl text-white"
+              >
+                {loading ? 'Saving...' : 'Save'}
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsEditing(false);
+                  setNewAgentName(agent_name); 
+                }}
+                className="bg-red-500 rounded-xl text-white"
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <div className="flex justify-center  items-center">
+              <span className=' mr-4'>{newAgentName}</span>
+              <Button onClick={() => setIsEditing(true)} >
+              <FaRegEdit />
+              </Button>
+            </div>
+          )}
         </header>
 
         <div className="flex flex-1">
@@ -96,6 +167,8 @@ export default function Custombox({ agent_name }) {
               <div>
                 <h3 className="text-lg font-semibold mb-4">Calendar</h3>
                 <p>Hiiiii! This is the calendar section.</p>
+                <br />
+                <SlCalender size={70} />
               </div>
             )}
 
@@ -103,6 +176,9 @@ export default function Custombox({ agent_name }) {
               <div>
                 <h3 className="text-lg font-semibold mb-4">Tags</h3>
                 <p>Heyyyyy! This is the tags section.</p>
+                <br />
+                <PiHashStraightFill size={70}/>
+
               </div>
             )}
           </section>
@@ -142,10 +218,14 @@ export default function Custombox({ agent_name }) {
 
             {activeToggle === 'call' && (
               <div className="space-y-4">
-                <Input placeholder="Select Phone Number" className = 'bg-purple-200' />
+                <select name="phoneCode" id="PhoneCode" className='bg-purple-200 h-10 border-2  border-black  w-52'>
+                  <option value="0">Select Phone Number</option>
+                  <option value="91">+91</option>
+                </select>
                 <Input placeholder="Enter Name" className = 'bg-purple-200'  />
                 <Input placeholder="Enter Phone Number" className = 'bg-purple-200'  />
                 <Button className="w-full bg-purple-600 text-white">Call Me</Button>
+                
               </div>
             )}
             {activeToggle === 'chat' && (
@@ -161,3 +241,7 @@ export default function Custombox({ agent_name }) {
   );
 }
 
+
+
+
+ 

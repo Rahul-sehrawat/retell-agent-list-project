@@ -1,7 +1,7 @@
 import Retell from 'retell-sdk';
 
 const client = new Retell({
-  apiKey: process.env.RETELL_API_KEY,  
+  apiKey: process.env.RETELL_API_KEY  
 });
 
 export async function GET() {
