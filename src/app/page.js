@@ -53,25 +53,25 @@ export default function Home() {
 
   return (
     <div className=' bg-gray-100 h-screen flex flex-col items-center p-10'>
-      <h1>List of Agents</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-800">List of Agents</h1>
       {agents.length === 0 ? (
-        <div>No agents found.</div>
+        <div className="text-gray-600 text-lg">No agents found.</div>
       ) : (
         <>
-          <Table className = ' w-[80%] '>
-            <TableHeader>
+          <Table className = ' w-[80%] g-white shadow-lg rounded-lg '>
+            <TableHeader className="bg-gray-200">
               <TableRow>
-                <TableHead>Agent name</TableHead>
-                <TableHead>Agent Id</TableHead>
-                <TableHead>Language</TableHead>
-                <TableHead>Voice ID</TableHead>
+                <TableHead className="p-4 text-left text-gray-700">Agent name</TableHead>
+                <TableHead className="p-4 text-left text-gray-700">Agent Id</TableHead>
+                <TableHead className="p-4 text-left text-gray-700">Language</TableHead>
+                <TableHead className="p-4 text-left text-gray-700">Voice ID</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {currentAgents.map((agent) => (
-                <TableRow key={agent.agent_id}>
-                  <TableCell className = ' hover:bg-blue-500 '>
-                    <Link href={`/agents/${agent.agent_id}`}>{agent.agent_name}</Link>
+                <TableRow key={agent.agent_id} className="hover:bg-blue-100 transition-colors duration-200">
+                  <TableCell className = ' p-4'>
+                    <Link href={`/agents/${agent.agent_id}`}className="text-blue-600 hover:underline">{agent.agent_name}</Link>
                   </TableCell>
                   <TableCell>{agent.agent_id}</TableCell>
                   <TableCell>{agent.language}</TableCell>
@@ -83,12 +83,13 @@ export default function Home() {
 
         
           <div className="pagination flex justify-center gap-4 mt-10">
-            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-            <TbPlayerTrackPrevFilled  size={30}/>
+            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}
+              className="p-2 bg-gray-300 rounded-full hover:bg-gray-400 disabled:bg-gray-200 disabled:cursor-not-allowed">
+            <TbPlayerTrackPrevFilled  size={24}/>
             </button>
-            <span> {currentPage}</span>
-            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-            <TbPlayerTrackNextFilled size={30} />
+            <span className="text-lg font-medium"> {currentPage}</span>
+            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}  className="p-2 bg-gray-300 rounded-full hover:bg-gray-400 disabled:bg-gray-200 disabled:cursor-not-allowed">
+            <TbPlayerTrackNextFilled size={24} />
             </button>
           </div>
         </>
@@ -96,3 +97,4 @@ export default function Home() {
     </div>
   );
 }
+

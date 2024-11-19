@@ -224,7 +224,7 @@ export default function Custombox({agent_id, agent_name }) {
                 </select>
                 <Input placeholder="Enter Name" className = 'bg-purple-200'  />
                 <Input placeholder="Enter Phone Number" className = 'bg-purple-200'  />
-                <Button className="w-full bg-purple-600 text-white">Call Me</Button>
+                <Button className="w-full bg-purple-600 text-black">Call Me</Button>
                 
               </div>
             )}
